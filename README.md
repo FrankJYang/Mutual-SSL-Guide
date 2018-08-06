@@ -1,6 +1,24 @@
 # SSL-Guide
 Basic Tutorial that teaches you how to set up a secure SSL with Liberty
 
+## Step I: set up a basic liberty server
+
+### Using Terminal 
+
+Clone from the follow repositorary: https://github.com/IBM-Cloud/java-helloworld.git
+
+We utilize Maven to build this project. Please refer to the [Maven Website](http://maven.apache.org/) for instructions on how to donwload maven onto your computer.
+**cd** into the java-helloworld folder, then issue the command **mvn clean install** to create the /target/JavaHelloWorldApp.war file.  
+You should see the following output: 
+[INFO] Packaging webapp
+[INFO] Assembling webapp [JavaHelloWorldApp] in [/Your-Directory/java-helloworld/target/JavaHelloWorldApp-1.0-SNAPSHOT]
+[INFO] Processing war project
+[INFO] Copying webapp resources [/Your-Directory/java-helloworld/src/main/webapp]
+[INFO] Webapp assembled in [24 msecs]
+[INFO] Building war: /Your-Directory/java-helloworld/target/JavaHelloWorldApp.war
+while you are in the java-helloworld folder, run **mvn liberty:run-server** to start up the server. Make sure you do not have a running application using *Port:9080* 
+
+#### Using Eclipse 
 
 
 Servlet.java: 
