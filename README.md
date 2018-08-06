@@ -1,6 +1,8 @@
 # SSL-Guide
 Basic Tutorial that teaches you how to set up a secure SSL with Liberty
 
+
+
 Servlet.java: 
   annotation: @servletSecurity @HttpConstraint 
   commented out basicAuthenticationMechanism
@@ -28,3 +30,12 @@ web.xml
   
 how it works:
   The client(browser/website) wants to access Liberty. key.jks is a self-signed SSL certificate. When the client visits Liberty, it checks its certificate with list of trusted CAs. In this case, since the cerificate was self-signed, we need to add a browser exception sayign that we trust this entity. 
+  
+what is mutual connection? 
+  The website has its certificate attached to it. The server verifies the client certificate
+  doesnt support jks 
+  
+  https://gist.github.com/mtigas/952344 --> generate a crt and pkcs12 
+  
+  
+  
