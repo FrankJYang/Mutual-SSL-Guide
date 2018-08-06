@@ -14,11 +14,11 @@ We utilize Apache Maven to build this project. Please refer to the [Maven Websit
 3. You should see the following output: 
 ```
 [INFO] Packaging webapp
-[INFO] Assembling webapp [JavaHelloWorldApp] in [/Your-Directory/java-helloworld/target/JavaHelloWorldApp-1.0-SNAPSHOT]
+[INFO] Assembling webapp [JavaHelloWorldApp] in [/[Insert-Directory]/java-helloworld/target/JavaHelloWorldApp-1.0-SNAPSHOT]
 [INFO] Processing war project
-[INFO] Copying webapp resources [/Your-Directory/java-helloworld/src/main/webapp]
+[INFO] Copying webapp resources [/[Insert-Directory]/java-helloworld/src/main/webapp]
 [INFO] Webapp assembled in [24 msecs]
-[INFO] Building war: /Your-Directory/java-helloworld/target/JavaHelloWorldApp.war
+[INFO] Building war: /[Insert-Directory]/java-helloworld/target/JavaHelloWorldApp.war
 ```
 4. while you are in the java-helloworld folder, run **mvn liberty:run-server** to start up the server
   *Make sure you do not have a running application using Port:9080* 
@@ -32,7 +32,7 @@ We utilize Apache Maven to build this project. Please refer to the [Maven Websit
   [INFO]  The server installed the following features: [servlet-3.1].
   [INFO]  The server defaultServer is ready to run a smarter planet.
 ```
-6. Check out your default server using the *http://YourLocalAddress:9080/JavaHelloWorldApp/* after Web application available (default_host)
+6. Check out your default server using the *http://[InsertLocalAddress]:9080/JavaHelloWorldApp/* from *Web application available (default_host)*
 
 
 
