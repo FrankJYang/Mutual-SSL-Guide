@@ -3,10 +3,9 @@ Basic Tutorial that teaches you how to set up a secure SSL with Liberty
 
 ## Step I: set up a basic liberty server
 
-### Please refer to the following guide for a more comprehensive guide
-  https://github.com/IBM-Cloud/java-helloworld
-#### Using Terminal 
-  We utilize Apache Maven to build this project. Please refer to the [Maven Website](http://maven.apache.org/) for instructions on how to install Apache Maven.
+### Please refer to the [IBM Cloud HelloWorld](https://github.com/IBM-Cloud/java-helloworld) for a more comprehensive set-up 
+
+We utilize Apache Maven to build this project. Please refer to the [Maven Website](http://maven.apache.org/) for instructions on how to install Apache Maven.
 
 1. Clone from the follow repositorary: https://github.com/IBM-Cloud/java-helloworld.git
 
@@ -23,6 +22,7 @@ Basic Tutorial that teaches you how to set up a secure SSL with Liberty
 ```
 4. while you are in the java-helloworld folder, run **mvn liberty:run-server** to start up the server
   *Make sure you do not have a running application using Port:9080* 
+  
 5. You should see the following output:
 ```
   [INFO]  The server defaultServer has been launched.
@@ -35,9 +35,8 @@ Basic Tutorial that teaches you how to set up a secure SSL with Liberty
 6. Check out your default server using the *http://YourLocalAddress:9080/JavaHelloWorldApp/* after Web application available (default_host)
 
 
-  
 
-#### Using Eclipse 
+
 
 
 Servlet.java: 
