@@ -35,13 +35,12 @@ We utilize Apache Maven to build this project. Please refer to the [Maven Websit
 ### Step II: modify the finished product
 Move into the "finish" folder, which contains the working example. Take a look at the following key points that enabled the mutual SSL. 
 
-1.    under *finish/src/main/java/io/openliberty/guides/hello/HelloServlet.java*  <br/>
+1.    under *finish/src/main/java/io/openliberty/guides/hello/HelloServlet.java*  
 
-(Servlet security annotation under @servletSecurity @HttpConstraint). <br/>
-
+(Servlet security annotation under @servletSecurity @HttpConstraint)  
 Specify the path as javax.servlet.annotation.ServletSecurity.TransportGuarantee.CONFIDENTIAL. This enable the transfer from http to a secured endpoint (https).
     
-2.    under *finish/target/liberty/wlp/usr/servers/defaultServer/bootstrap.properties* <br/>
+2.    under *finish/target/liberty/wlp/usr/servers/defaultServer/bootstrap.properties* 
 
 modify the default https path here
     
