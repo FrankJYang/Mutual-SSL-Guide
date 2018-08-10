@@ -1,207 +1,51 @@
-// Copyright (c) 2017 IBM Corporation and others.
-// Licensed under Creative Commons Attribution-NoDerivatives
-// 4.0 International (CC BY-ND 4.0)
-//   https://creativecommons.org/licenses/by-nd/4.0/
-//
-// Contributors:
-//   IBM Corporation
-:projectid: microprofile-security
-:page-layout: guide
-:page-duration: 30 minutes
-:page-releasedate: 2017-12-11
-:page-description: Learn how to use the
-:page-tags: ['REST', 'MicroProfile', 'Security', 'CDI']
-:page-permalink: /guides/{projectid}
-:common-includes: https://raw.githubusercontent.com/OpenLiberty/guides-common/master
-:source-highlighter: prettify
-= Securing a web application.
+SSL-Guide
 
-Learn how to use appSecurity-3.0 to secure a web application.
+Basic Tutorial that teaches you how to set up a secure SSL with Liberty
+Step I: set up a basic liberty server
+Please refer to the IBM Cloud HelloWorld for a more comprehensive set-up
 
-// =================================================================================================
-// What you'll learn
-// =================================================================================================
+We utilize Apache Maven to build this project. Please refer to the Maven Website for instructions on how to install Apache Maven.
 
-== What you'll learn
-You will learn how to secure your web application by performing authentication and authorization. 
+    Clone from the follow repositorary: https://github.com/IBM-Cloud/java-helloworld.git
 
-Authentication confirms the identity of the user. The most common authentication is user name and password, through basic authentication or form authentication. This application demonstrates both methods of authentication. You will be setting up a basic user registry with test variables. 
+    Move into the java-helloworld folder, then issue the command mvn clean install to create the /target/JavaHelloWorldApp.war file
 
---
---
---
+    You should see the following output:
 
-Authorization determines whether a user has access to a specific role within the system. This application specifies two roles: Administrator and User. 
+[INFO] Packaging webapp
+[INFO] Assembling webapp [JavaHelloWorldApp] in [/[Insert-Directory]/java-helloworld/target/JavaHelloWorldApp-1.0-SNAPSHOT]
+[INFO] Processing war project
+[INFO] Copying webapp resources [/[Insert-Directory]/java-helloworld/src/main/webapp]
+[INFO] Webapp assembled in [24 msecs]
+[INFO] Building war: /[Insert-Directory]/java-helloworld/target/JavaHelloWorldApp.war
 
---
---
---
+    while you are in the java-helloworld folder, run mvn liberty:run-server to start up the server Make sure you do not have a running application using Port:9080
 
-The application itself allows users and admins to access servlets. Administrators have access to both servlets, the HelloServlet and the AdminServlet. Whereas the user will only have access to the HelloServlet.
+    You should see the following output:
 
-This guide will also demonstrate two different ways to achieve authorization and authentication: through configuration in the web.xml file and through annotations on the servlets.
+  [INFO]  The server defaultServer has been launched.
+  [INFO]  Monitoring dropins for applications.
+  [INFO]  Web application available (default_host): http://YourLocalAddress:9080/JavaHelloWorldApp/
+  [INFO]  Application JavaHelloWorldApp started in X seconds.
+  [INFO]  The server installed the following features: [servlet-3.1].
+  [INFO]  The server defaultServer is ready to run a smarter planet.
 
+    Check out your default server using the http://[InsertLocalAddress]:9080/JavaHelloWorldApp/ from Web application available (default_host)
 
-// =================================================================================================
-== Getting Started
-// =================================================================================================
+Servlet.java: annotation: @servletSecurity @HttpConstraint commented out basicAuthenticationMechanism for transportGuarantee, specify the path as javax.servlet.annotation.ServletSecurity.TransportGuarantee.CONFIDENTIAL (might be unnecessary, need testing)
 
+index.html href: redirect to servlet or adminonly from server.xml
 
-The fastest way to work through this guide is to clone the Git repository and use the projects that are provided inside:
+bootstrap.properties default http/https port location and context root
 
-[subs="attributes"]
-----
-git clone https://github.com/openliberty/guide-{projectid}.git
-cd guide-{projectid}
-----
+server.xml keyStore: default id and password basicRegistry: show user(name), user password, group(admin/user) httpEndpoint: called from bootstrap webApplcation: where the Servlet is stored (war file) traceSpecification: enable trace functionality
 
-The `start` directory contains the starting project that you will build upon.
+web.xml added the security constraint: transport guarantee confidential
 
-The `finish` directory contains the finished project, which is what you will build.
+"/finish/target/liberty/wlp/usr/servers/defaultServer/resources/security" removed the key
 
-*Try what you'll build*
+how it works: The client(browser/website) wants to access Liberty. key.jks is a self-signed SSL certificate. When the client visits Liberty, it checks its certificate with list of trusted CAs. In this case, since the cerificate was self-signed, we need to add a browser exception sayign that we trust this entity.
 
-The  `finish` directory in the root of this guide contains the finished events application. Feel free to give it a try before you proceed.
+what is mutual connection? The website has its certificate attached to it. The server verifies the client certificate doesnt support jks
 
-To try out the application, first navigate to the `finish` directory and then run the following Maven goals to build the application and run it inside Open Liberty:
-
-`mvn install liberty:start-server`
-
-Next, point your browser to:
-
-`http://localhost:9080/ServletSample`
-
-As mentioned above, you can access this application under two different roles:
-
-.Basic Registry
-|===
-|Username |Password|Role
-
-|bob
-|bobpwd
-|admin
-
-|alice
-|alicepwd
-|user
-|===
-
-You can try out the authentication of the application by clicking the first link and signing in with either credentials from the Basic Registry and you can try the authorization by clicking the second link and signing in as Bob to view the AdminServlet. When you sign in as Alice, you will not have access to the AdminServlet.
-
-In order to sign in as different users, you must close the browser and re-open it at the same link.
-
-Once you are done checking out the application, stop the Open Liberty server:
-`mvn liberty:stop-server`
-
-
-
-// =================================================================================================
-//
-// =================================================================================================
-== Configuring a user registry
-
-The user registry is set up to define users and group information. To do this, you need to add the following `Basic Registry` into the server.xml file:
-
-[source, xml, indent=0]
-----
-include::finish/src/main/liberty/config/server.xml[tags=security]
-----
-
-
-Now you've defined users and groups in the basic user registry for authentication. The names for the users and groups must be unique. In this app, there is a group called "admin" and another group called "user". 
-
-As you can see, the password is encoded here with Liberty's securityUtility command. Here, the application uses the xor encoding. There are two other supported encodings are well: hash and aes that can be used.
-
-== Implementing authentication
-
-Next, authentication is implemented in order to confirm the identity of the user. This application uses Basic Authentication. Basic Authentication is a simple method to authenticate a user with a username and password. The request is sent with an Authorization header that contains the word `Basic` followed by a base64-encoded string in the format `username:password`.
-
-Open the `server.xml file` located under `liberty/config/server.xml`. Notice how basic authentication is configured in the server.xml. The auth-method specifies that the authentication mechanism used is Basic and the realm name is declared. 
-
-[source, xml, indent=0]
-----
-include::finish/src/main/liberty/config/server.xml[tags=security]
-----
-
-Remove the login-config from the server.xml file and open the HelloServlet.java file located at `src/main/java/io/openliberty/guides/hello`. `HelloServlet` is a simple servlet that shows the message `Hello! How are you today?` if accessed. Add the `@BasicAuthenticationMechanismDefinition` to the HelloServlet.java file to configure Basic Authentication.
-
-[source, java, indent=0]
-----
-include::finish/src/main/java/io/openliberty/guides/hello/HelloServlet.java[tags=security;!copyright]
-----
-
-
-
-== Implementing authorization
-Authorization determines whether a user has access to a certain role within the system. This is currently configured in the web.xml file under webapp/WEB-INF. 
-
-[source, xml, indent=0]
-----
-include::finish/src/main/webapp/WEB-INF/web.xml[tags=security]
-----
-
-This can be achieved with the annotation `@ServletSecurity`. Remove the security-constraints and open the HelloServlet.java and add the following `@ServletSecurity` annotation to the class:
-
-[source, java, indent=0]
-----
-include::finish/src/main/java/io/openliberty/guides/hello/HelloServlet.java[tags=security;!copyright]
-----
-
-The roles "admin" and "user" are identical to the group names in the basic registry. They must be exactly the same for the mapping to work. They are declared under rolesAllowed so that the Hello Servlet can only be accessed by those two user groups.
-
-Now, open the `AdminServlet.java` file and add the same annotation, except only allow "admin" in roles allowed. `AdminServlet` is a servlet that displays the message `Hello Admin! How are you today?` when accessed.
-
-[source, java, indent=0]
-----
-include::finish/src/main/java/io/openliberty/guides/hello/AdminServlet.java[tags=security;!copyright]
-----
-
-This specifies that even if a "user" such as Alice is signed in, they will not be able to access the Admin Servlet.
-
-// =================================================================================================
-// Building the application
-// =================================================================================================
-
-== Building the application
-include::{common-includes}/mvnbuild.adoc[]
-
-
-// =================================================================================================
-// Starting the application
-// =================================================================================================
-
-== Starting the application
-
-To see the new application in action, run the Maven `liberty:start-server` command from the `start` directory:
-
-[source]
-----
-$ mvn liberty:start-server
-----
-
-
-
-
-// =================================================================================================
-// Testing the application
-// =================================================================================================
-
-== Testing the application
-
-Create the test class, `src/test/java/io/openliberty/guides/hello/it/SecurityTest.java`.
-
-
-[source, java, indent=0]
-----
-include::finish/src/test/java/io/openliberty/guides/hello/it/SecurityTest.java[tags=security;!copyright]
-----
-
-There are four tests in this class, `testCorrectAdmin()` accesses the AdminServlet using Bob's credentials and `testCorrectUser()` accesses the UserServlet using Alice's credentials which should both yield `200 OK` responses. `testIncorrectAuthorization()` accesses the AdminServlet using Alice's credentials which yields a `403 Forbidden` response and finally there is a test for incorrect credentials `testIncorrectUser()` which yields a `401 Unauthorized` response.
-
-=== Running the tests
-
-
-
-== Great work! You're done!
-
-include::{common-includes}/finish.adoc[]
+https://gist.github.com/mtigas/952344 --> generate a crt and pkcs12
