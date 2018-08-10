@@ -38,10 +38,8 @@ import javax.security.enterprise.authentication.mechanism.http.BasicAuthenticati
 @WebServlet(urlPatterns="/servlet")
   
 @ServletSecurity(@HttpConstraint(rolesAllowed = {"admin", "user"}, transportGuarantee = javax.servlet.annotation.ServletSecurity.TransportGuarantee.CONFIDENTIAL)) 
-/*
-    @ServletSecurity(@HttpConstraint(rolesAllowed = {"admin", "user"}))
 
- 
+/* 
 @ServletSecurity(
 		 value = @HttpConstraint(rolesAllowed = {"admin", "user"}, transportGuarantee = TransportGuarantee.CONFIDENTIAL))
 */

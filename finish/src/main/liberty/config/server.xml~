@@ -8,7 +8,7 @@
 
      
     <keyStore id="defaultKeyStore" password="temppass1" /> <!-- pwd: Liberty, expires 1/4/2099 -->
-    <ssl id="defaultSSLConfig" keyStoreRef="defaultKeyStore" clientAuthentication="true" /> 
+<!--    <ssl id="defaultSSLConfig" keyStoreRef="defaultKeyStore" clientAuthentication="true" /> -->
         <basicRegistry id="basic" realm="myRealm">
      <user name="bob" password="bobpwd" />  <!-- bobpwd -->
      <user name="alice" password="{xor}PjM2PDovKDs=" />  <!-- alicepwd -->
