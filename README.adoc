@@ -1,8 +1,8 @@
-SSL-Guide
+##  SSL-Guide
 
 Basic Tutorial that teaches you how to set up a secure SSL with Liberty
-###Step I: set up a basic liberty server
-##Please refer to the IBM Cloud HelloWorld for a more comprehensive set-up
+### Step I: set up a basic liberty server
+## Please refer to the IBM Cloud HelloWorld for a more comprehensive set-up
 
 We utilize Apache Maven to build this project. Please refer to the Maven Website for instructions on how to install Apache Maven.
 
